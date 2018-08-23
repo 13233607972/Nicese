@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script>
+            $(function () {
+                show();
+            });
+            function show() {
+                var id=[[${id}]];
+                $.ajax({
+                    "url":"http://localhost:8766/getOne/"+id,
+                    "dataType":"json",
+                    "type":"get",
+                    "success":function (result) {
+                        var str=null;
+                       $(result).each(function () {
+                           str+="<h1>修改电子图书</h1><br />图书编号<input readonly id='id'value='"+this.id+"' ><br /> 图书名称：<input id='title'type='text' value='"+this.title+"' /><br />分类编号:<input id='categoryId' type='text' value='"+this.categoryId+"'><br /> 图书摘要：<input id='summary' type='text'value='"+this.summary+"' /><br />上传人: <input id='uploadUser'type='text' value='"+this.uploadUser+"' /><br />上传时间(*)：<input id='createDate'type='text' value='"+this.createDate+"' /><yyyy-MM-dd><br />";
+                       });
+                        $("#info").append(str);
+
+                    },
+                    "error":function () {
+                        alert("数据库错误");
+                    }
+                })
+            }
+
+            function upd() {
+                var id=[[${id}]];
+                var title = $("#title").val();
+                var categoryId=$("#categoryId").val();
+                var summary = $("#summary").val();
+                var uploadUser = $("#uploadUser").val();
+                var createDate=$("#createDate").val();
+                $.ajax({
+                    "url":"http://localhost:8766/upd",
+                    "dataType":"json",
+                    "data":{
+                        "id":id,
+                        "title":title,
+                        "summary":summary,
+                        "uploadUser":uploadUser,
+                        "createDate":createDate,
+                        "categoryId":categoryId
+                    },
+                    "type":"get",
+                    "success":function (result) {
+                        if(result>0){
+                            alert("修改成功");
+                           window.location.href="show";
+                        }else{
+                            alert("修改失败");
+                        }
+                    }
+                })
+            }
+    </script>
+</head>
+<body>
+<div id="info">
+
+</div>
+<button type="button" onclick="upd()">提交</button>
+<button type="button" onclick="show()">返回</button>
+</body>
+</html>
